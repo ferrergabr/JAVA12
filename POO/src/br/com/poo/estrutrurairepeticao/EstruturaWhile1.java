@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class EstruturaWhile1 extends JFrame {
 
@@ -75,12 +77,7 @@ public class EstruturaWhile1 extends JFrame {
 		contentPane.add(txtFinal);
 		txtFinal.setColumns(10);
 		
-		JButton btnExecutar = new JButton("Executar");
-		btnExecutar.setForeground(new Color(128, 0, 128));
-		btnExecutar.setBackground(new Color(255, 255, 255));
-		btnExecutar.setFont(new Font("Segoe UI Historic", Font.BOLD | Font.ITALIC, 16));
-		btnExecutar.setBounds(10, 99, 117, 23);
-		contentPane.add(btnExecutar);
+		
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 155, 160, 170);
@@ -88,5 +85,16 @@ public class EstruturaWhile1 extends JFrame {
 		
 		JTextArea textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
+		
+		JButton btnExecutar = new JButton("Executar");
+		btnExecutar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnExecutar.setForeground(new Color(128, 0, 128));
+		btnExecutar.setBackground(new Color(255, 255, 255));
+		btnExecutar.setFont(new Font("Segoe UI Historic", Font.BOLD | Font.ITALIC, 16));
+		btnExecutar.setBounds(10, 99, 117, 23);
+		contentPane.add(btnExecutar);
 	}
 }
