@@ -106,7 +106,7 @@ public class Padaria_1 extends JFrame {
 					if(textCodigoProduto.getText() == produtos [linha][0]) {
 						textCodigoBarras.setText(produtos [linha][3]);
 						textDescricao.setText(produtos[linha][1]);
-						textValorUnitario.setText(produtos[linha][2]);
+						textValorUnitario..setText(produtos[linha][2]);
 						
 					
 						}

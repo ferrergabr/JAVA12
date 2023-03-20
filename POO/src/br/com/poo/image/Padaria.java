@@ -1,21 +1,25 @@
 package br.com.poo.image;
 
-import java.awt.EventQueue;
-import java.awt.Image;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import java.awt.SystemColor;
-import javax.swing.JLabel;
-import javax.swing.ImageIcon;
-import java.awt.Font;
-import javax.swing.JTextField;
 import java.awt.Color;
-import javax.swing.JSeparator;
-import javax.swing.JButton;
+import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 public class Padaria extends JFrame {
 
@@ -27,7 +31,12 @@ public class Padaria extends JFrame {
 	private JTextField txtQuantidade;
 	private JTextField txtTotalItem;
 	private JTextField txtSubtotal;
-
+	private JTextArea txtNota;
+	private String cabecalho;
+	private int item;
+	private double valorPagar;
+	private JLabel lblValorPagar;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -48,6 +57,28 @@ public class Padaria extends JFrame {
 	 * Create the frame.
 	 */
 	public Padaria() {
+		valorPagar = 0.0;
+		item = 1;
+		
+		
+		item = 1;
+		
+		
+		cabecalho = "\t\t\tPadaria da Ilha\n\t\t\t  Desde 1983"+
+		"\n\t\t               Av.Paulo Matuidi, 777 - Vila Formosa"+
+		"\n\t\t             CEP : 30140-140 - COGULANDIA - AL"+
+		"\n\t\t                   CNPJ : 12.235.656/0001-53"+
+		"\n\t\t                      IE : 003.044314.0006"+
+		"\n\t\t                        IM : 1.046.973/001-0"+
+		"\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n"+
+		"\n\t\t\tCUPOM FISCAL"+
+		"\nItem\tCodigo\t\tDescricao\t\tQTD\tVL.Unit.\tVL.Total"+
+		"\n-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";;
+		
+			
+		
+		
+		
 		
 		String[][] produtos = {
 				
@@ -188,6 +219,24 @@ public class Padaria extends JFrame {
 		pnlEsquerdo.add(lblQuantidade);
 		
 		txtQuantidade = new JTextField();
+		txtQuantidade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				txtTotalItem.setText(""+
+						Double.parseDouble(txtQuantidade.getText())*
+						Double.parseDouble(txtValorUnitario.getText())
+						);
+				
+				txtSubtotal.setText("R$"+
+						Double.parseDouble(txtQuantidade.getText())*
+						Double.parseDouble(txtValorUnitario.getText())
+						);
+				
+				
+				
+			}
+		});
 		txtQuantidade.setForeground(Color.WHITE);
 		txtQuantidade.setFont(new Font("Arial", Font.ITALIC, 20));
 		txtQuantidade.setColumns(10);
@@ -226,6 +275,28 @@ public class Padaria extends JFrame {
 		pnlEsquerdo.add(txtSubtotal);
 		
 		JButton btnIncluir = new JButton("Incluir");
+		btnIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				cabecalho+="\n"+item+"\t"+txtCodigoProduto.getText()+
+						"\t\t"+txtDescricao.getText()+
+						"\t\t"+ txtQuantidade.getText()+
+						"\t"+ txtValorUnitario.getText()+
+						"\t"+ txtTotalItem.getText();
+				
+				
+				txtNota.setText(cabecalho);
+				item++;
+				
+				
+				valorPagar += Double.parseDouble(txtTotalItem.getText());
+				lblValorPagar.setText("R$ "+valorPagar);
+				
+				
+								
+			}
+		});
 		btnIncluir.setBackground(SystemColor.activeCaption);
 		btnIncluir.setIcon(new ImageIcon(Padaria.class.getResource("/br/com/poo/image/Icone.png")));
 		btnIncluir.setFont(new Font("Arial", Font.BOLD, 30));
@@ -236,10 +307,31 @@ public class Padaria extends JFrame {
 		pnlDireito.setBackground(SystemColor.activeCaptionBorder);
 		pnlDireito.setBounds(810, 0, 774, 700);
 		contentPane.add(pnlDireito);
+		pnlDireito.setLayout(null);
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(SystemColor.scrollbar);
-		panel.setBounds(0, 710, 1584, 150);
-		contentPane.add(panel);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 774, 700);
+		pnlDireito.add(scrollPane);
+		
+		txtNota = new JTextArea();
+		scrollPane.setViewportView(txtNota);
+		txtNota.setText(cabecalho);
+		
+		JPanel pnlBase = new JPanel();
+		pnlBase.setBackground(SystemColor.scrollbar);
+		pnlBase.setBounds(0, 710, 1584, 150);
+		contentPane.add(pnlBase);
+		pnlBase.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("Valor a Pagar:");
+		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 32));
+		lblNewLabel.setBounds(208, 24, 341, 94);
+		pnlBase.add(lblNewLabel);
+		
+		lblValorPagar = new JLabel("New label");
+		lblValorPagar.setFont(new Font("Arial", Font.BOLD, 32));
+		lblValorPagar.setBounds(559, 24, 275, 94);
+		pnlBase.add(lblValorPagar);
+		lblValorPagar.setText("R$" +valorPagar);
 	}
 }

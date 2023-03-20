@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -12,7 +14,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
@@ -26,6 +30,12 @@ public class Padaria extends JFrame {
 	private JTextField txtQuantidade;
 	private JTextField txtTotal;
 	private JTextField txtSubtotal;
+	private JTextArea txtNota;
+	private String cabecalho; 
+	private int item;
+	private double valorPagar;
+	private JLabel lblNewLabel;
+	private JLabel lblValorPagar;
 
 	/**
 	 * Launch the application.
@@ -47,6 +57,27 @@ public class Padaria extends JFrame {
 	 * Create the frame.
 	 */
 	public Padaria() {
+		
+		valorPagar = 0.0; 
+		item = 1;
+		
+		
+		cabecalho = "\t\t\t A Padaria\n"+
+					"\n\t\t Av. Magrao Gay, 699 - Papa Nova Guiné"+
+					"\n\t\t CEP: 5723-9080 - Lae - PAPNVG"+
+					"\nCNPJ: 67.456./0001-89"+
+					"\nIE:005.86347.0004"+
+					"\nIM:6.564/001-5"+
+					"\n-------------------------------------------------------------------------------------------------"
+					+ "------------------------------------------------------------------------------------------------------------"+
+					"\n\t\t                       CUPOM FISCAL"+
+					"\nItem\tCodigo\tDescricao\t\tQTD\tVL.UNIT\t\tVL.Total"+
+					"\n-----------------------------------------------------------------------------------------------------"
+					+ "-------------------------------------------------------------------------------------------------------";
+					
+					
+		
+		
 		
 		String[][] produtos = {
 				
@@ -181,6 +212,23 @@ public class Padaria extends JFrame {
 		pnlEsquerdo.add(lblQuantidade);
 		
 		txtQuantidade = new JTextField();
+		txtQuantidade.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+				
+				txtTotal.setText(""+
+						Double.parseDouble(txtQuantidade.getText())*
+						Double.parseDouble(txtValor.getText())
+						);
+				
+				txtSubtotal.setText("R$"+
+						Double.parseDouble(txtQuantidade.getText())*
+						Double.parseDouble(txtValor.getText())
+						);
+				
+			}
+		});
 		txtQuantidade.setForeground(Color.BLACK);
 		txtQuantidade.setColumns(10);
 		txtQuantidade.setBackground(Color.LIGHT_GRAY);
@@ -220,6 +268,26 @@ public class Padaria extends JFrame {
 		txtSubtotal.setBorder(null);
 		
 		JButton btnIncluir = new JButton("Incluir");
+		btnIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cabecalho+="\n"+item+"\t"+txtCodigoProduto.getText()+
+						"\t"+txtDescricao.getText()+
+						"\t\t"+txtQuantidade.getText()+
+						"\t"+txtValor.getText()+
+						"\t\t"+txtTotal.getText();
+						
+						
+						
+						txtNota.setText(cabecalho);	
+						item++;
+						
+						valorPagar += Double.parseDouble(txtTotal.getText());
+						lblValorPagar.setText("R$ "+valorPagar);
+						
+						
+			}
+		});
+		
 		btnIncluir.setIcon(new ImageIcon(Padaria.class.getResource("/br/com/poo/images/Botao1.png")));
 		btnIncluir.setFont(new Font("Swis721 WGL4 BT", Font.PLAIN, 20));
 		btnIncluir.setBackground(Color.WHITE);
@@ -234,11 +302,30 @@ public class Padaria extends JFrame {
 		contentPane.add(pnlDireito);
 		pnlDireito.setLayout(null);
 		
-		JPanel pnlBasico = new JPanel();
-		pnlBasico.setBackground(Color.LIGHT_GRAY);
-		pnlBasico.setForeground(Color.BLACK);
-		pnlBasico.setBounds(0, 710, 1584, 150);
-		contentPane.add(pnlBasico);
-		pnlBasico.setLayout(null);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(0, 0, 774, 700);
+		pnlDireito.add(scrollPane);
+		
+	    txtNota = new JTextArea();
+		scrollPane.setViewportView(txtNota);
+		txtNota.setText(cabecalho);
+		
+		JPanel pnlBase = new JPanel();
+		pnlBase.setBackground(Color.LIGHT_GRAY);
+		pnlBase.setForeground(Color.BLACK);
+		pnlBase.setBounds(0, 710, 1584, 150);
+		contentPane.add(pnlBase);
+		pnlBase.setLayout(null);
+		
+	    lblNewLabel = new JLabel("Valor a Pagar:");
+		lblNewLabel.setFont(new Font("Rockwell Extra Bold", Font.PLAIN, 26));
+		lblNewLabel.setBounds(775, 41, 233, 78);
+		pnlBase.add(lblNewLabel);
+		
+	    lblValorPagar = new JLabel("");
+		lblValorPagar.setFont(new Font("Rockwell Extra Bold", Font.PLAIN, 50));
+		lblValorPagar.setBounds(1099, 41, 475, 78);
+		pnlBase.add(lblValorPagar);
+		lblValorPagar.setText("R$"+valorPagar);
 	}
 }
